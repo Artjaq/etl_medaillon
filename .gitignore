@@ -1,0 +1,28 @@
+# Apache Hop audit logs (Permission denied errors)
+audit/
+./audit/
+
+# Logs
+*.log
+
+# Apache Hop config directory
+.hop/
+
+# Temporary files
+*.tmp
+
+# macOS metadata
+.DS_Store
+
+# Apache Hop application (not part of the project)
+hop-2/
+
+# Legacy source folder (replaced by clean datasets/)
+datasets 2/
+
+# Claude Code internal files
+.claude/
+
+# Other OS/editor artifacts
+Thumbs.db
+*.swp

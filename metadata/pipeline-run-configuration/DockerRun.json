@@ -1,0 +1,20 @@
+{
+  "engineRunConfiguration": {
+    "Remote": {
+      "export_resources": false,
+      "resources_target_folder": "",
+      "resources_source_folder": "",
+      "run_config": "DockerRun",
+      "server_poll_interval": "",
+      "hop_server": "LocalRemote",
+      "server_poll_delay": ""
+    }
+  },
+  "virtualPath": "",
+  "defaultSelection": false,
+  "configurationVariables": [],
+  "name": "DockerRun",
+  "description": "Exécution docker",
+  "dataProfile": "",
+  "executionInfoLocationName": ""
+}

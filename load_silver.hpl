@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>load_silver</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description/>
+    <extended_description/>
+    <pipeline_version/>
+    <pipeline_type>Normal</pipeline_type>
+    <parameters>
+    </parameters>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <created_user>-</created_user>
+    <created_date>2026/05/13 11:53:05.513</created_date>
+    <modified_user>-</modified_user>
+    <modified_date>2026/05/13 11:53:05.513</modified_date>
+  </info>
+  <notepads>
+  </notepads>
+  <order>
+    <hop>
+      <from>Read_Bronze_Categories</from>
+      <to>Write_Silver_Categories</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Read_Bronze_Location</from>
+      <to>Write_Silver_Location</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Read_Bronze_ERP_Cust</from>
+      <to>Write_Silver_ERP_Cust</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Read_Bronze_CRM_Cust</from>
+      <to>Write_Silver_CRM_Cust</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Read_Bronze_CRM_Prd</from>
+      <to>Write_Silver_CRM_Prd</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Read_Bronze_CRM_Sales</from>
+      <to>Write_Silver_CRM_Sales</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>Read_Bronze_Categories</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgreSQL</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT 
+  id, 
+  cat, 
+  subcat, 
+  maintenance,
+  CURRENT_TIMESTAMP AS dwh_create_date
+FROM bronze.erp_px_cat_g1v2;</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>144</xloc>
+      <yloc>160</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Write_Silver_Categories</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgreSQL</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+</fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>silver</schema>
+    <specify_fields>N</specify_fields>
+    <table>erp_px_cat_g1v2</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>160</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Read_Bronze_Location</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgreSQL</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT 
+  REPLACE(cid, '-', '') AS cid,
+  CASE 
+    WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+    WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+    WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'n/a'
+    ELSE TRIM(cntry)
+  END AS cntry,
+  CURRENT_TIMESTAMP AS dwh_create_date
+FROM bronze.erp_loc_a101;</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>128</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Write_Silver_Location</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgreSQL</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+</fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>silver</schema>
+    <specify_fields>N</specify_fields>
+    <table>erp_loc_a101</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Read_Bronze_ERP_Cust</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgreSQL</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT 
+  cid,
+  CASE 
+    WHEN bdate > CURRENT_DATE THEN NULL 
+    ELSE bdate 
+  END AS bdate,
+  CASE 
+    WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+    WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+    ELSE TRIM(gen)
+  END AS gen,
+  CURRENT_TIMESTAMP AS dwh_create_date
+FROM bronze.erp_cust_az12;</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>416</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Write_Silver_ERP_Cust</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgreSQL</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+</fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>silver</schema>
+    <specify_fields>N</specify_fields>
+    <table>erp_cust_az12</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>320</xloc>
+      <yloc>432</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Read_Bronze_CRM_Cust</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgreSQL</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>WITH ranked_customers AS (
+  SELECT 
+    cst_id,
+    cst_key,
+    TRIM(cst_firstname) AS cst_firstname,
+    TRIM(cst_lastname) AS cst_lastname,
+    CASE 
+      WHEN UPPER(TRIM(cst_marital_status)) IN ('M', 'MARRIED') THEN 'Married'
+      WHEN UPPER(TRIM(cst_marital_status)) IN ('S', 'SINGLE') THEN 'Single'
+      ELSE 'n/a'
+    END AS cst_marital_status,
+    CASE 
+      WHEN UPPER(TRIM(cst_gndr)) IN ('F', 'FEMALE') THEN 'Female'
+      WHEN UPPER(TRIM(cst_gndr)) IN ('M', 'MALE') THEN 'Male'
+      ELSE 'n/a'
+    END AS cst_gndr,
+    cst_create_date,
+    ROW_NUMBER() OVER (PARTITION BY cst_id ORDER BY cst_create_date DESC) AS row_num
+  FROM bronze.crm_cust_info
+)
+SELECT 
+  cst_id,
+  cst_key,
+  cst_firstname,
+  cst_lastname,
+  cst_marital_status,
+  cst_gndr,
+  cst_create_date,
+  CURRENT_TIMESTAMP AS dwh_create_date
+FROM ranked_customers
+WHERE row_num = 1;</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>656</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Write_Silver_CRM_Cust</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgreSQL</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+</fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>silver</schema>
+    <specify_fields>N</specify_fields>
+    <table>crm_cust_info</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>656</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Read_Bronze_CRM_Prd</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgreSQL</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT 
+  prd_id,
+  prd_key,
+  -- Découpage de la clé pour extraire la catégorie (ex: 'CO-RF...' donne 'CO')
+  SPLIT_PART(prd_key, '-', 1) AS cat_id,
+  prd_nm,
+  -- Remplacement des valeurs nulles par 0
+  COALESCE(prd_cost, 0) AS prd_cost,
+  -- Décodage de la ligne de produit
+  CASE 
+    WHEN UPPER(TRIM(prd_line)) = 'M' THEN 'Mountain'
+    WHEN UPPER(TRIM(prd_line)) = 'R' THEN 'Road'
+    WHEN UPPER(TRIM(prd_line)) = 'T' THEN 'Touring'
+    WHEN UPPER(TRIM(prd_line)) = 'S' THEN 'Standard'
+    ELSE 'n/a'
+  END AS prd_line,
+  prd_start_dt,
+  prd_end_dt,
+  CURRENT_TIMESTAMP AS dwh_create_date
+FROM bronze.crm_prd_info;</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>752</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Write_Silver_CRM_Prd</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgreSQL</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+</fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>silver</schema>
+    <specify_fields>N</specify_fields>
+    <table>crm_prd_info</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>752</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Read_Bronze_CRM_Sales</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgreSQL</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT 
+  sls_ord_num,
+  sls_prd_key,
+  sls_cust_id,
+  
+  -- Conversion sécurisée : on ne convertit que si la chaîne fait exactement 8 caractères (YYYYMMDD)
+  CASE WHEN LENGTH(sls_order_dt::text) = 8 THEN TO_DATE(sls_order_dt::text, 'YYYYMMDD') ELSE NULL END AS sls_order_dt,
+  CASE WHEN LENGTH(sls_ship_dt::text) = 8 THEN TO_DATE(sls_ship_dt::text, 'YYYYMMDD') ELSE NULL END AS sls_ship_dt,
+  CASE WHEN LENGTH(sls_due_dt::text) = 8 THEN TO_DATE(sls_due_dt::text, 'YYYYMMDD') ELSE NULL END AS sls_due_dt,
+  
+  sls_quantity,
+  
+  -- Cohérence des ventes : si 0 ou NULL, on recalcule (quantité * prix)
+  CASE 
+    WHEN sls_sales IS NULL OR sls_sales &lt;= 0 THEN sls_quantity * sls_price
+    ELSE sls_sales 
+  END AS sls_sales,
+  
+  -- Cohérence du prix : si 0 ou NULL, on recalcule (ventes / quantité)
+  CASE 
+    WHEN sls_price IS NULL OR sls_price &lt;= 0 THEN 
+      CASE WHEN sls_quantity > 0 THEN sls_sales / sls_quantity ELSE 0 END
+    ELSE sls_price
+  END AS sls_price,
+  
+  CURRENT_TIMESTAMP AS dwh_create_date
+FROM bronze.crm_sales_details;</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>864</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Write_Silver_CRM_Sales</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>postgreSQL</connection>
+    <drop_columns>N</drop_columns>
+    <fields>
+</fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_field/>
+    <return_keys>N</return_keys>
+    <schema>silver</schema>
+    <specify_fields>N</specify_fields>
+    <table>crm_sales_details</table>
+    <tablename_field/>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
+    <attributes/>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>864</yloc>
+    </GUI>
+  </transform>
+  <transform_error_handling>
+  </transform_error_handling>
+  <attributes/>
+</pipeline>
